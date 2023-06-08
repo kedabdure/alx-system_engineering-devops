@@ -1,0 +1,2 @@
+#!/bin/bash
+chmod -R +rwx . && find . -type f -exec chmod -x {} +

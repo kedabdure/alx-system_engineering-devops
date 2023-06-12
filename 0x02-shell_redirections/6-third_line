@@ -1,2 +1,2 @@
 #!/bin/bash
-awk 'NR==3' iacta
+grep -n '^' iacta | sed -n '3p' | sed 's/^[0-9]\+://'

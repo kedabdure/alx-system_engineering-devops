@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -n '^' iacta | sed -n '3p' | sed 's/^[0-9]\+://'
+head -n 3 iacta | tail -n 1

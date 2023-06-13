@@ -1,2 +1,2 @@
 #!/bin/bash
-printf "%s\n" "$(echo "obase=bestchol; ibase=water; $WATER + ibase=stir; $STIR" | bc)"
+awk -v water="$WATER" -v stir="$STIR" 'BEGIN{print "ibase=water; obase=bestchol; result = stir + water"; result = result; print result}'

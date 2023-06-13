@@ -1,0 +1,2 @@
+#!/bin/bash
+printf "%s\n" {a..n}{a..z} {a..o}{p..z} | grep -Ev "oo"

@@ -1,2 +1,2 @@
 #!/bin/bash
-paste - - | cut -d$'\t' -f1
+tr 'A-Za-z' 'N-ZA-Mn-za-m'

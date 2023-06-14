@@ -1,2 +1,2 @@
 #!/bin/bash
-printf '%s\n' $(echo "ibase=5; obase=10; $STIR + $WATER" | bc | tr -d '\\\n' | bc | awk '{print sprintf("%0d", $0)}' | tr '0123456789' 'behlnort')
+printf '%s\n' $(echo "obase=bestchol; ibase=water; $WATER + $STIR" | bc | tr -d '\\\n' | bc | awk '{print sprintf("%0d", $0)}' | tr '0123456789ABCDEF' 'abcdefghijklmnopqrstuvwxyz')

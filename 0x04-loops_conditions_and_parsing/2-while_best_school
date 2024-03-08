@@ -2,7 +2,8 @@
 #this script is displaying "Best school" 10 times
 
 COUNTER=0
-while [ $COUNTER -lt 10 ]; do
+while [ $COUNTER -lt 10 ]
+do
 	echo "Best School"
 	((COUNTER++))
 done

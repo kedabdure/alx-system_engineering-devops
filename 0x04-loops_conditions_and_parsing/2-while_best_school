@@ -6,4 +6,3 @@ while [ $COUNTER -lt 10 ]; do
 	echo "Best School"
 	((COUNTER++))
 done
-

@@ -35,9 +35,9 @@ def display_todo_progress(employee_id):
     total_tasks = len(todos_data)
     d_t_c = len(c_t)
 
-    print(f"Employee {e_m} is done with tasks ({d_t_c}/{total_tasks}):")
+    print(f"Employee {e_m} is done with tasks ({d_t_c}/{total_tasks}): ")
     for task in c_t:
-        print(f"\t {task}")
+        print(f"\t{task}")
 
 
 if __name__ == "__main__":

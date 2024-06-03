@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""modole for fetch api"""
 import requests
 import sys
 
@@ -6,6 +8,7 @@ API = 'https://jsonplaceholder.typicode.com'
 
 
 def get_employee_data(employee_id):
+    """fetch user and todo list data"""
     user_url = f"{API}/users/{employee_id}"
     user_response = requests.get(user_url)
     if user_response.status_code != 200:
@@ -22,6 +25,7 @@ def get_employee_data(employee_id):
 
 
 def display_todo_progress(employee_id):
+    """display the data"""
     try:
         user, todos = get_employee_data(employee_id)
     except Exception as e:
@@ -39,6 +43,7 @@ def display_todo_progress(employee_id):
 
 
 if __name__ == "__main__":
+    """main function"""
     if len(sys.argv) != 2:
         print("Usage: python3 todo_progress.py <employee_id>")
         sys.exit(1)

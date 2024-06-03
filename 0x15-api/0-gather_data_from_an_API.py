@@ -38,9 +38,12 @@ def display_todo_progress(employee_id):
     done_tasks_count = len(completed_tasks)
 
     print(
-        f"Employee {employee_name} is done with tasks "
-        f"({done_tasks_count}/{total_tasks}):"
-    )
+                'Employee {} is done with tasks({}/{}):'.format(
+                    employee_name,
+                    len(completed_tasks),
+                    len(todos_data)
+                )
+            )
     for task in completed_tasks:
         print(f"\t {task}")
 

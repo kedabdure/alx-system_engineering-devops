@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """
-Fetches and displays TODO list progress for a given employee using the JSONPlaceholder API.
+Fetches and displays TODO list progress using the JSONPlaceholder API.
 """
 
 import requests
 import sys
 
 API_URL = "https://jsonplaceholder.typicode.com"
+
 
 def fetch_employee_data(employee_id):
     """Fetch employee and TODO data from the API."""
@@ -20,6 +21,7 @@ def fetch_employee_data(employee_id):
 
     return user_response.json(), todos_response.json()
 
+
 def display_todo_progress(employee_id):
     """Display the TODO list progress for the employee."""
     try:
@@ -29,13 +31,16 @@ def display_todo_progress(employee_id):
         return
 
     employee_name = user_data.get('name')
-    completed_tasks = [todo['title'] for todo in todos_data if todo['completed']]
+    completed_tasks = [todo['title']
+                       for todo in todos_data if todo['completed']]
     total_tasks = len(todos_data)
     done_tasks_count = len(completed_tasks)
 
-    print(f"Employee {employee_name} is done with tasks({done_tasks_count}/{total_tasks}):")
+    print(f"Employee {employee_name} is done with tasks\
+          ({done_tasks_count}/{total_tasks}): ")
     for task in completed_tasks:
         print(f"\t {task}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

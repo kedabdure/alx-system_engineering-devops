@@ -1,51 +1,45 @@
 #!/usr/bin/python3
-"""modole for fetch api"""
+"""
+Fetches and displays TODO list progress for a given employee using the JSONPlaceholder API.
+"""
+
 import requests
 import sys
 
+API_URL = "https://jsonplaceholder.typicode.com"
 
-API = 'https://jsonplaceholder.typicode.com'
+def fetch_employee_data(employee_id):
+    """Fetch employee and TODO data from the API."""
+    user_response = requests.get(f"{API_URL}/users/{employee_id}")
+    todos_response = requests.get(f"{API_URL}/todos?userId={employee_id}")
 
-
-def get_employee_data(employee_id):
-    """fetch user and todo list data"""
-    user_url = f"{API}/users/{employee_id}"
-    user_response = requests.get(user_url)
     if user_response.status_code != 200:
-        raise Exception(f"Failed to fetch user data: {user_response.status_code}")
-    user_data = user_response.json()
-
-    todos_url = f"{API}/todos?userId={employee_id}"
-    todos_response = requests.get(todos_url)
+        raise Exception("Error fetching user data")
     if todos_response.status_code != 200:
-        raise Exception(f"Failed to fetch TODO data: {todos_response.status_code}")
-    todos_data = todos_response.json()
+        raise Exception("Error fetching TODO data")
 
-    return user_data, todos_data
-
+    return user_response.json(), todos_response.json()
 
 def display_todo_progress(employee_id):
-    """display the data"""
+    """Display the TODO list progress for the employee."""
     try:
-        user, todos = get_employee_data(employee_id)
+        user_data, todos_data = fetch_employee_data(employee_id)
     except Exception as e:
         print(e)
         return
 
-    employee_name = user['name']
-    completed_tasks = [todo['title'] for todo in todos if todo['completed']]
-    total_tasks = len(todos)
-    number_of_done_tasks = len(completed_tasks)
+    employee_name = user_data.get('name')
+    completed_tasks = [todo['title'] for todo in todos_data if todo['completed']]
+    total_tasks = len(todos_data)
+    done_tasks_count = len(completed_tasks)
 
-    print(f"Employee {employee_name} is done with tasks ({number_of_done_tasks}/{total_tasks}): ")
+    print(f"Employee {employee_name} is done with tasks({done_tasks_count}/{total_tasks}):")
     for task in completed_tasks:
         print(f"\t {task}")
 
-
 if __name__ == "__main__":
-    """main function"""
     if len(sys.argv) != 2:
-        print("Usage: python3 todo_progress.py <employee_id>")
+        print("Usage: python3 script.py <employee_id>")
         sys.exit(1)
 
     try:

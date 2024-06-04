@@ -1,67 +1,48 @@
 #!/usr/bin/python3
 """
-Fetches and displays TODO list progress using the JSONPlaceholder API.
-Exports data to a JSON file.
+Fetches and exports user TODO data to a JSON file.
 """
 
+import json
 import requests
 import sys
-import json
+
 
 API_URL = "https://jsonplaceholder.typicode.com"
 
 
-def fetch_employee_data(employee_id):
-    """Fetch employee and TODO data from the API."""
-    user_response = requests.get(f"{API_URL}/users/{employee_id}")
-    todos_response = requests.get(f"{API_URL}/todos?userId={employee_id}")
+def get_user_and_todos(user_id):
+    """Fetch user and todos data for a given user ID."""
+    user_resp = requests.get(f"{API_URL}/users/{user_id}")
+    todos_resp = requests.get(f"{API_URL}/todos", params={"userId": user_id})
 
-    if user_response.status_code != 200:
-        raise Exception("Error fetching user data")
-    if todos_response.status_code != 200:
-        raise Exception("Error fetching TODO data")
+    if user_resp.status_code != 200 or todos_resp.status_code != 200:
+        raise Exception("Error fetching data")
 
-    return user_response.json(), todos_response.json()
+    user = user_resp.json()
+    todos = todos_resp.json()
+    return user, todos
 
 
-def export_to_json(employee_id):
-    """Export the TODO list progress for the employee to a JSON file."""
-    try:
-        user_data, todos_data = fetch_employee_data(employee_id)
-    except Exception as e:
-        print(e)
-        return
-
-    username = user_data.get('username')
+def save_to_json(user_id, username, todos):
+    """Save user TODO data to a JSON file."""
     tasks = [
-        {
-            "task": todo['title'],
-            "completed": todo['completed'],
-            "username": username
-        } for todo in todos_data
+        {"task": todo["title"], "completed": todo["completed"], "username": username}
+        for todo in todos
     ]
-
-    json_data = {str(employee_id): tasks}
-
-    file_name = f"{employee_id}.json"
-    with open(file_name, 'w') as json_file:
-        json.dump(json_data, json_file, indent=4)
-
-    print(
-        f"Data for employee ID +"
-        f"{employee_id} has been exported to {file_name}"
-    )
+    with open(f"{user_id}.json", 'w') as file:
+        json.dump({str(user_id): tasks}, file, indent=4)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
         print("Usage: python3 script.py <employee_id>")
         sys.exit(1)
 
+    user_id = int(sys.argv[1])
     try:
-        employee_id = int(sys.argv[1])
-    except ValueError:
-        print("Invalid employee ID. Please enter a numeric value.")
+        user, todos = get_user_and_todos(user_id)
+        save_to_json(user_id, user['username'], todos)
+    except Exception as e:
+        print(e)
         sys.exit(1)
-
-    export_to_json(employee_id)

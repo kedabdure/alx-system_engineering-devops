@@ -1,58 +1,43 @@
 #!/usr/bin/python3
 """
-Using https://jsonplaceholder.typicode.com
-gathers data from API and exports it to JSON file
+Fetches data from the JSONPlaceholder API and exports it to a JSON file.
 """
-
 import json
 import requests
 
-API_URL = "https://jsonplaceholder.typicode.com"
+BASE_URL = "https://jsonplaceholder.typicode.com"
 
 
 def fetch_data(endpoint):
-    """Fetch data from the API endpoint."""
-    response = requests.get(f"{API_URL}/{endpoint}")
-    if response.status_code != 200:
-        raise Exception(f"Error fetching data from {endpoint}")
+    """Fetch data from the provided endpoint."""
+    response = requests.get(f"{BASE_URL}/{endpoint}")
+    response.raise_for_status()
     return response.json()
 
 
 def main():
-    """Main function to fetch user and todo data and export it to a JSON file."""
-    try:
-        users = fetch_data("users")
-        todos = fetch_data("todos")
-    except Exception as e:
-        print(e)
-        return
-
-    all_users_data = {}
-
+    users = fetch_data("users")
+    todos = fetch_data("todos")
+    
+    user_tasks = {}
     for user in users:
-        user_id = user.get('id')
-        username = user.get('username')
+        user_id = user['id']
+        username = user['username']
         
-        # Filter todos for the current user
-        user_todos = [todo for todo in todos if todo['userId'] == user_id]
-        
-        user_tasks = [
+        user_todos = [
             {
                 'username': username,
-                'task': todo.get('title'),
-                'completed': todo.get('completed')
+                'task': todo['title'],
+                'completed': todo['completed']
             }
-            for todo in user_todos
+            for todo in todos if todo['userId'] == user_id
         ]
         
-        all_users_data[user_id] = user_tasks
-
-    # Write data to JSON file
-    with open('todo_all_employees.json', 'w') as json_file:
-        json.dump(all_users_data, json_file, indent=4)
-
-    print("Data for all employees has been exported to todo_all_employees.json")
+        user_tasks[user_id] = user_todos
+    
+    with open('todo_all_employees.json', 'w') as file:
+        json.dump(user_tasks, file, indent=4)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

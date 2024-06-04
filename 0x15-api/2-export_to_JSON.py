@@ -27,7 +27,8 @@ def get_user_and_todos(user_id):
 def save_to_json(user_id, username, todos):
     """Save user TODO data to a JSON file."""
     tasks = [
-        {"task": todo["title"], "completed": todo["completed"], "username": username}
+        {"task": todo["title"], "completed": todo["completed"],
+         "username": username}
         for todo in todos
     ]
     with open(f"{user_id}.json", 'w') as file:

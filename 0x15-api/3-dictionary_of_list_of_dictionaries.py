@@ -18,12 +18,12 @@ def fetch_data(endpoint):
 def main():
     users = fetch_data("users")
     todos = fetch_data("todos")
-    
+
     user_tasks = {}
     for user in users:
         user_id = user['id']
         username = user['username']
-        
+
         user_todos = [
             {
                 'username': username,
@@ -32,9 +32,9 @@ def main():
             }
             for todo in todos if todo['userId'] == user_id
         ]
-        
+
         user_tasks[user_id] = user_todos
-    
+
     with open('todo_all_employees.json', 'w') as file:
         json.dump(user_tasks, file, indent=4)
 
